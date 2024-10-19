@@ -1,33 +1,33 @@
-import { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { handlePatientSignup } from "../Services/patientService";
 
 const Signup = () => {
   const navigate = useNavigate();
-  
+
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    dateOfBirth: '',
-    gender: '',
-    age: '',
-    address: '',
-    contactNumber: '',
-    email: '',
-    password: '',
+    firstName: "",
+    lastName: "",
+    dateOfBirth: "",
+    gender: "",
+    age: "",
+    address: "",
+    contactNumber: "",
+    email: "",
+    password: "",
     closestPerson: {
-      firstName: '',
-      lastName: '',
-      address: '',
-      contactNumber: '',
+      firstName: "",
+      lastName: "",
+      address: "",
+      contactNumber: "",
     },
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    if (name.includes('closestPerson')) {
-      const fieldName = name.split('.')[1];
+    if (name.includes("closestPerson")) {
+      const fieldName = name.split(".")[1];
       setFormData((prevData) => ({
         ...prevData,
         closestPerson: {
@@ -45,24 +45,22 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
-      const backendURL = "http://localhost:5000/api/patients/signup";
-  
-      const response = await axios.post(backendURL, formData);
-  
-      if (response.ok) {
-        const result = await response.json();
-        console.log('Signup successful:', result);
-        navigate('/login');
-        
+      const response = await handlePatientSignup(formData);
+      console.log("Signup response:", response.status);
+
+      if (response.status === 201) {
+        console.log("Response is 201, navigating...");
+        const result = response.data;
+        console.log("Signup successful:", result);
+        navigate("/login");
       } else {
-        const errorData = await response.json();
-        console.error('Signup failed:', errorData);
-        // Handle error message from the server (e.g., display to user)
+        const errorData = await response.data; // Adjust based on how you return error data
+        console.error("Signup failed:", errorData);
       }
     } catch (error) {
-      console.error('Error during signup:', error);
+      console.error("Error during signup:", error);
       // Handle network or server errors (e.g., display generic error message)
     }
   };
@@ -181,7 +179,9 @@ const Signup = () => {
             required
           />
         </div>
-        <h3 className="mb-2 text-xl font-bold">Closest Person&apos;s Details</h3>
+        <h3 className="mb-2 text-xl font-bold">
+          Closest Person&apos;s Details
+        </h3>
         <div className="mb-4">
           <input
             type="text"
@@ -222,7 +222,10 @@ const Signup = () => {
             required
           />
         </div>
-        <button type="submit" className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700">
+        <button
+          type="submit"
+          className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
+        >
           Signup
         </button>
       </form>

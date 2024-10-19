@@ -5,6 +5,7 @@ import Signup from "./pages/Signup";
 import PatientLogin from "./components/PatientLogin";
 import ForgotPassword from "./components/ForgotPassword";
 import VerifyOTP from "./components/VerifyOTP";
+import ResetPassword from "./components/ResetPassword";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/verifyotp" element={<VerifyOTP />} />
           <Route path="/" element={<Home />} />
+          <Route path="/reset-password/:hash" element={<ResetPassword />} />
         </Routes>
       </Router>
     </>
